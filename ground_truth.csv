@@ -1,0 +1,114 @@
+query,expected_value,expected_unit,source_page
+What is the torque for the Lower arm forward and rearward nuts?,350,Nm,24
+What is the torque for the Lower ball joint nut?,175,Nm,24
+What is the torque for the Shock absorber lower nuts?,90,Nm,24
+What is the torque for the Shock absorber upper mount nuts?,63,Nm,24
+What is the torque for the Shock rod nut?,55,Nm,24
+What is the torque for the Stabilizer bar bracket nuts?,55,Nm,24
+What is the torque for the Stabilizer bar link nuts?,70,Nm,24
+What is the torque for the Tie-rod end nut?,115,Nm,24
+What is the torque for the Upper arm-to-frame nuts?,150,Nm,24
+What is the torque for the Upper ball joint nut?,115,Nm,24
+What is the torque for the Wheel bearing and wheel hub bolts?,175,Nm,24
+What is the torque for the Halfshaft nut?,40,Nm,59
+What is the torque for the Shock absorber lower nut (SVT Raptor)?,550,Nm,59
+What is the torque for the Skid plate bolts?,48,Nm,59
+What is the torque for the Stabilizer bar link nuts (SVT Raptor)?,80,Nm,59
+What is the The minimum depth is?,15.5,mm,104
+What is the less than?,15.5,mm,104
+What is the torque for the Shock absorber nuts?,90,Nm,128
+What is the torque for the Spring shackle-to-frame nut?,185,Nm,128
+What is the torque for the Spring-to-frame nut?,350,Nm,128
+What is the torque for the Spring-to-shackle nut?,185,Nm,128
+What is the torque for the Jounce bumper-to-frame bolt?,35,Nm,128
+What is the The protrusion on the spring spacer should face toward the front of the vehicle on?,157,in,137
+What is the wheelbase applications and face toward the rear on?,126,in,137
+What is the z If the runout reading of a wheel and tire assembly is greater than?,1.14,mm,182
+What is the z If the runout reading of a wheel and tire assembly is?,1.14,mm,182
+What is the within?,101.6,mm,183
+What is the z If the second high spot is not within?,101.6,mm,183
+What is the If the second high spot is still above specification and within?,101.6,mm,184
+What is the wheel runout exceeds?,1.14,mm,184
+What is the For every?,0.001,in,185
+What is the Drive pinion flange runout?,0.25,mm,199
+What is the Maximum allowable driveshaft runout?,0.50,mm,199
+What is the wheelbase?,4.6,L,214
+What is the If the flange runout exceeds?,0.25,mm,218
+What is the flange runout is still more than?,0.25,mm,218
+What is the z If the runout exceeds?,1,mm,229
+What is the z If the front and center is within?,1,mm,229
+What is the z If the runout is within?,1,mm,229
+What is the second test with the?,12,mm,231
+What is the Separate the clamp heads about?,13,mm,233
+What is the torque for the Rear driveshaft center bearing bolts?,48,Nm,234
+What is the torque for the Rear driveshaft flange bolts?,103,Nm,234
+What is the torque for the Front driveshaft flange-to-pinion flange bolts?,55,Nm,234
+What is the torque for the Front driveshaft flange-to-transfer case flange bolts?,55,Nm,234
+What is the torque for the Skid plate bolts (SVT Raptor vehicles)?,48,Nm,234
+What is the Available drive pinion bearing adjustment shim in steps of?,0.25,mm,258
+What is the Differential case maximum runout?,0.076,mm,258
+What is the Ring gear maximum variation between teeth backlash?,0.102,mm,258
+What is the Maximum axle shaft flange runout?,0.279,mm,258
+What is the torque for the Brake hose bracket bolts?,30,Nm,259
+What is the torque for the parking brake cable bracket bolt?,25,Nm,259
+What is the torque for the RH parking brake cable bracket bolt?,30,Nm,259
+What is the torque for the Differential bearing cap bolt?,112,Nm,259
+What is the torque for the Differential housing cover bolts?,45,Nm,259
+What is the torque for the Differential pinion shaft lock bolt?,30,Nm,259
+What is the torque for the Filler plug?,52,Nm,259
+What is the torque for the Lower shock absorber nuts?,90,Nm,259
+What is the fill the axle with?,2.8,L,308
+What is the Purple Kit with spacer for all?,223.52,mm,324
+What is the Install the RH side differential bearing cap and tighten the?,4,L,338
+What is the Available drive pinion shims in steps of?,0.25,mm,341
+What is the Maximum differential case flange ring gear runout?,0.076,mm,341
+What is the Maximum variation between ring gear teeth?,0.102,mm,341
+What is the torque for the Differential bearing cap bolts?,105,Nm,341
+What is the torque for the Driveshaft flange bolts?,103,Nm,341
+What is the torque for the Fill plug?,30,Nm,342
+What is the To engage or disengage the ELD while in?,4,L,343
+What is the Position the?,2,L,366
+What is the torque for the Part of kit?,4880,Nm,368
+What is the Ring gear maximum backlash between teeth?,0.101,mm,449
+What is the Maximum differential housing spread?,0.762,mm,449
+What is the Lubricant level?,9.56,mm,449
+What is the torque for the Axle housing tube bolts?,73,Nm,449
+What is the torque for the Axle housing tube bushing bolt?,175,Nm,449
+What is the torque for the Crossmember bolts and nuts?,90,Nm,450
+What is the torque for the Front axle housing bushing bolt?,175,Nm,450
+What is the torque for the Rear axle housing bushing bolt?,175,Nm,450
+What is the torque for the Lower steering column shaft-to-steering gear bolt?,30,Nm,450
+What is the thickness by?,0.203,mm,483
+What is the The allowable backlash is?,0.203,mm,532
+What is the vary more than?,0.101,mm,532
+What is the Left halfshaft assembled length?,406.45,mm,578
+What is the Right halfshaft assembled length?,411.85,mm,578
+What is the torque for the Brake flexible hose bracket bolt?,30,Nm,578
+What is the torque for the Wheel hub nut?,40,Nm,578
+What is the Front brake disc minimum thickness?,32,mm,599
+What is the Rear brake disc minimum thickness?,23.0,mm,599
+What is the Minimum brake pad thickness?,3.0,mm,599
+What is the torque for the Master cylinder primary brake tube fittings?,28,Nm,599
+What is the runout target is?,0.000,mm,617
+What is the Brake disc minimum thickness?,32,mm,636
+What is the Brake pad minimum thickness?,3.0,mm,636
+What is the torque for the Brake caliper anchor plate bolts?,250,Nm,636
+What is the torque for the Brake caliper flow bolt?,35,Nm,636
+What is the torque for the Brake caliper guide pin bolts?,37,Nm,636
+What is the torque for the Brake flexible hose bracket-to-wheel knuckle bolt?,30,Nm,636
+What is the torque for the Brake caliper support bracket bolts?,150,Nm,652
+What is the torque for the Brake flexible hose bracket-to-axle bolt?,30,Nm,652
+What is the Parking brake shoe clearance?,0.59,mm,672
+What is the torque for the Parking brake cable bracket bolt (RH)?,30,Nm,672
+What is the cable union until the parking brake control sector rotates to its stop and a?,4,mm,680
+What is the Adjust the parking brake shoe clearance to?,0.59,mm,682
+What is the torque for the Brake master cylinder nuts?,25,Nm,696
+What is the torque for the Brake pedal bracket bolts?,25,Nm,696
+What is the torque for the Primary brake tube fitting?,28,Nm,696
+What is the Use an?,11,mm,730
+What is the Vehicles equipped with a?,3.5,L,735
+What is the torque for the Master cylinder primary brake tube-to- HCU fitting?,28,Nm,747
+What is the For the?,6.2,L,756
+What is the Vehicles with a?,6.2,L,794
+What is the Only available on the?,6.2,L,816
+What is the z Set a gain of?,10,in,836

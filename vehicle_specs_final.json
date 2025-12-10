@@ -1,0 +1,26 @@
+[
+    {
+        "component":"Brake caliper anchor plate bolts",
+        "spec_type":"Torque",
+        "value":"250",
+        "unit":"Nm",
+        "source_page":638,
+        "context_snippet":"Front Disc Brake  The front brake disc system consists of the following components:  z Brake pads  z Brake caliper anchor plate  z Brake caliper  z Brake disc  z Brake disc shield  z Brake flexible ho..."
+    },
+    {
+        "component":"Front brake disc",
+        "spec_type":"minimum thickness",
+        "value":"32",
+        "unit":"mm",
+        "source_page":618,
+        "context_snippet":"11. Measure the brake disc thickness.  z If the measurement is below the minimum specification, install a new brake disc. For additional  information, refer to Section 206-03 for front disc brakes or ..."
+    },
+    {
+        "component":"Lower ball joint nut",
+        "spec_type":"Torque",
+        "value":175,
+        "unit":"Nm",
+        "source_page":585,
+        "context_snippet":"9. Remove and discard the tie-rod end nut.  z Disconnect the tie-rod end from the wheel knuckle.  z To install, tighten the new tie-rod end nut to 115 Nm (85 lb-ft).  10. Remove and discard the upper ..."
+    }
+]
