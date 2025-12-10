@@ -1,6 +1,1 @@
-Question,Expected,Predicted,Status,Source Page
-What is the The allowable backlash is?,0.203 mm,0.203 to 0.305 mm,PASS,571
-What is the torque for the Shock rod nut?,55.0 Nm,55 Nm,FAIL,742
-What is the Separate the clamp heads about?,13.0 mm,13 mm,FAIL,233
-What is the torque for the Part of kit?,4880.0 Nm,N/A ,FAIL,321
-What is the torque for the Wheel bearing and wheel hub bolts?,175.0 Nm,175 Nm,FAIL,779
+
