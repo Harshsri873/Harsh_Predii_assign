@@ -1,64 +1,318 @@
-# 🚗 Automotive Specification Extraction RAG Pipeline
+# 🚗 Automotive Specification Extraction – RAG Pipeline
 
-## 📌 Project Overview
-This project implements a **Retrieval-Augmented Generation (RAG)** system designed to automatically extract technical vehicle specifications (e.g., torque values, dimensions, fluid capacities) from unstructured PDF service manuals.
+*A Retrieval-Augmented Generation system for extracting structured vehicle specifications from unstructured service manuals.*
 
-Unlike standard search tools, this system understands technical context and returns structured **JSON data**, making it ready for database integration. It includes a robust **self-evaluation framework** that automatically generates test cases from the source text to benchmark performance.
+---
 
-## 🏗️ System Architecture
-The pipeline is built using **LangChain** and follows a "Hybrid Search" architecture for maximum accuracy:
+## 📘 1. Project Overview
 
-1.  **Ingestion & Cleaning**: 
-    * Loads PDF using `PyPDFLoader`.
-    * **Custom Preprocessing**: Regex cleaning removes page headers/footers to prevent context fragmentation.
-2.  **Chunking**: 
-    * Uses `RecursiveCharacterTextSplitter` (1200 chars, 200 overlap) to keep table rows and headers together.
-3.  **Hybrid Retrieval (The "Secret Sauce")**:
-    * **Semantic Search**: Uses **FAISS** vector store with `all-MiniLM-L6-v2` embeddings to understand intent.
-    * **Keyword Search**: Uses **BM25** to catch exact part names (e.g., "W707628").
-    * **Ensemble**: Combines results (50/50 weight) to feed the LLM the best context.
-4.  **Extraction Intelligence**:
-    * **Model**: Google **Gemini 1.5 Flash** (via API) for high-speed, cost-effective inference.
-    * **Prompt Engineering**: Enforces strict JSON output format (`component`, `spec_type`, `value`, `unit`).
-5.  **User Interface**:
-    * **Gradio Web UI**: Provides a user-friendly way to query the manual and verify sources.
+Automotive service manuals contain thousands of torque specifications, dimensions, fluid capacities, and mechanical parameters distributed across dense text and engineering diagrams. Extracting these values manually is slow and error-prone.
 
-## 🛠️ Tech Stack
-* **Framework**: LangChain, LangChain-Google-GenAI
-* **LLM**: Google Gemini 1.5 Flash
-* **Vector Store**: FAISS (Facebook AI Similarity Search)
-* **Embeddings**: Hugging Face (`sentence-transformers`)
-* **UI**: Gradio
-* **Data Processing**: Pandas, PyPDF, Tqdm
+This project implements a **Retrieval-Augmented Generation (RAG)** pipeline that automatically extracts such specifications from PDF service manuals and returns structured JSON output such as:
 
-## 📊 Automated Evaluation Pipeline
-The system goes beyond simple queries by implementing an **Automated Ground Truth Generation** engine:
+```json
+{
+  "component": "Rear Brake Caliper Bolt",
+  "value": "35",
+  "unit": "Nm",
+  "source_page": 54
+}
+```
 
-1.  **Auto-Discovery**: Scans the raw PDF text for regex patterns (e.g., `"Tighten to X Nm"`, `"Capacity X.X L"`) to identify ~100+ potential test specifications.
-2.  **Test Set Creation**: Automatically compiles a `ground_truth.csv` file containing the Question, Expected Value, and Unit.
-3.  **Batch Testing**: Runs the RAG model against a random sample (or full set) of these questions.
-4.  **Scoring Logic**:
-    * **Exact Match**: Predicted value equals expected value.
-    * **Fuzzy/Contains Match**: Handles variations like "35" vs "35-40".
-5.  **Reporting**: Generates a detailed CSV report (`final_evaluation_results.csv`) with Status (PASS/FAIL), Predicted vs Actual, and Source Page verification.
+The system uses a hybrid retrieval strategy (semantic + keyword search) combined with a structured LLM output prompt to achieve high accuracy and reliability.
 
-## 🚀 How to Run
-1.  **Prerequisites**:
-    ```bash
-    pip install langchain langchain-google-genai faiss-cpu gradio sentence-transformers rank_bm25 tqdm
-    ```
-2.  **Environment Setup**:
-    * Get a free API key from [Google AI Studio](https://aistudio.google.com/).
-    * Set `GOOGLE_API_KEY` in the notebook when prompted.
-3.  **Execution**:
-    * Upload `sample-service-manual 1.pdf` to the root directory.
-    * Run all cells in `assignment_predii.ipynb`.
-    * The **Gradio UI** will launch at the bottom for interactive testing.
-    * The **Evaluation Report** will be saved as `final_evaluation_results.csv`.
+---
 
-## 📂 File Structure
-* `assignment_predii.ipynb`: Main notebook containing the pipeline, UI, and evaluation logic.
-* `vehicle_specs_final.json`: Extracted output from manual queries.
-* `ground_truth.csv`: Automatically generated test questions from the manual.
-* `final_evaluation_results.csv`: Performance report of the model against the ground truth.
-* `README.md`: This documentation file.
+## 🏗 2. System Architecture
+
+This end-to-end architecture ensures clean data ingestion, accurate retrieval, and structured LLM reasoning.
+
+### 2.1 Data Ingestion & Preprocessing
+
+**Input**
+A PDF service manual such as `sample-service-manual 1.pdf`.
+
+**Processing Steps**
+
+1. **Loading**
+   Using `PyPDFLoader` to extract text from all pages.
+
+2. **Cleaning**
+   Custom Regex pipeline removes:
+
+   * headers / footers
+   * repeating watermarks
+   * page numbers
+   * excessive whitespace
+
+3. **Chunking (Updated Configuration)**
+   The cleaned text is segmented using a window-based splitter:
+
+   * **Chunk size:** `1200` characters
+   * **Overlap:** `200` characters
+
+   **Reasoning**
+
+   * Larger chunks preserve rich technical context.
+   * Overlap ensures continuity of specification values that span multiple paragraphs.
+
+**Output**
+A list of well-structured text chunks optimized for downstream embeddings.
+
+---
+
+### 2.2 Knowledge Base Construction
+
+The system builds two parallel indexes—semantic and sparse—for robust retrieval.
+
+1. **Semantic Embeddings**
+
+   * Model: `sentence-transformers/all-MiniLM-L6-v2`
+   * 384-dimensional vector representation for each chunk
+   * Captures meaning, relationships, and engineering semantics
+
+2. **Vector Store**
+
+   * Engine: **FAISS FlatL2**
+   * Performs fast similarity search to find semantically relevant chunks
+
+3. **Sparse Keyword Index**
+
+   * Engine: **BM25**
+   * Essential for exact string matching:
+
+     * torque values
+     * abbreviations
+     * part numbers
+     * pressure units
+
+4. **Hybrid Ensemble Retrieval**
+   Scores are combined:
+
+```text
+final_score = 0.5 * FAISS_score + 0.5 * BM25_score
+```
+
+This ensures semantic context is preserved and exact match queries are always captured.
+
+---
+
+### 2.3 Retrieval Layer
+
+When a user asks a question, the system:
+
+* Runs semantic search on FAISS
+* Runs keyword search on BM25
+* Merges and ranks both result sets
+* Returns the top-K most relevant chunks
+
+This hybrid retrieval solves common issues such as:
+
+* torque numbers missed by semantic search
+* semantically relevant paragraphs missed by keyword search
+
+---
+
+### 2.4 Generation Layer
+
+**LLM**
+
+* Google Gemini 2.5 Flash
+
+**Prompt Engineering**
+A strict system prompt enforces:
+
+* `"Do NOT use outside knowledge"`
+* `"Respond ONLY using provided chunks"`
+* `"Output valid JSON format"`
+
+**Example Output**
+
+```json
+{
+  "component": "Front Strut Upper Bolt",
+  "value": "60",
+  "unit": "Nm",
+  "source_page": 47
+}
+```
+
+This avoids hallucination and guarantees usable structured output.
+
+---
+
+### 2.5 Postprocessing & User Interface
+
+**JSON Extraction**
+Validates:
+
+* numerical correctness
+* unit consistency
+* presence of required fields
+
+**Gradio Frontend**
+Displays:
+
+* extracted component specifications
+* JSON output
+* source evidence
+* highlighted text from retrieved chunks
+
+This makes the system practical for both technicians and automation pipelines.
+
+---
+
+### 2.6 Self-Evaluation Framework
+
+The system automatically:
+
+1. Scans the PDF for spec-like patterns
+2. Generates synthetic Q/A test cases
+3. Queries its own RAG pipeline
+4. Compares predicted vs expected values
+5. Produces accuracy metrics
+
+This allows continuous improvement and scaling to new manuals.
+
+---
+
+## 🧰 3. Tech Stack
+
+* **Languages:** Python 3.10+
+* **Embeddings / NLP:** SentenceTransformers (`all-MiniLM-L6-v2`), LangChain text splitters
+* **LLM:** Google Gemini 2.5 Flash (via API)
+* **Vector DB:** FAISS (FlatL2)
+* **Keyword Search:** BM25
+* **PDF Parsing:** PyPDFLoader + custom Regex cleaning
+* **Table Parsing / Optional:** PDFPlumber, Camelot, Unstructured.io (future)
+* **UI:** Gradio
+* **Evaluation:** Python scripts (regex-based ground truth & metrics)
+
+---
+
+## 🚀 4. Project Capabilities
+
+* Extract torque values and other numeric specifications
+* Extract dimensions or mechanical parameters
+* Retrieve relevant engineering context for extracted specs
+* Output clean, validated JSON with `component`, `value`, `unit`, `source_page`
+* Provide page-level traceability and highlighted evidence
+* Auto-evaluate extraction accuracy using generated test cases
+
+Works best on digital PDFs and semi-structured technical content.
+
+---
+
+## 🔧 5. Areas for Improvement (Future Roadmap)
+
+Below is a structured roadmap of enhancements that can make this pipeline production-grade and significantly more powerful.
+
+### 5.1 OCR Integration for Scanned Manuals
+
+**Limitation**
+`PyPDFLoader` cannot read text from scanned PDFs, diagrams containing embedded text, or images of tables.
+
+**Improvement**
+Integrate OCR: Tesseract, AWS Textract, or Google Document AI.
+
+**Benefit**
+Unlocks image-based specification tables, engineering diagrams, and older manuals.
+
+---
+
+### 5.2 Cross-Encoder Reranking
+
+**Limitation**
+Hybrid retrieval often finds relevant chunks, but not always at the top positions.
+
+**Improvement**
+Use a Cross-Encoder Reranker (e.g., `ms-marco-MiniLM-L-6-v2`) to re-score the top N retrieved chunks.
+
+**Benefit**
+Dramatically improves precision, reduces hallucinations, and provides cleaner context for the LLM.
+
+---
+
+### 5.3 Table-Aware Parsing
+
+**Limitation**
+Tables are flattened during text extraction → relationships between headers and cells are lost.
+
+**Improvement**
+Use table parsers (Unstructured.io, PDFPlumber, Camelot) to convert tables into JSON/Markdown/row-column structures before embedding.
+
+**Benefit**
+Perfect extraction of torque charts, fluid capacities, and dimensional tables.
+
+---
+
+### 5.4 Agentic RAG (LangGraph Integration)
+
+**Limitation**
+Current workflow is strictly linear: `Retrieve → Answer`. It cannot perform multi-step reasoning, conversions, or self-correction.
+
+**Improvement**
+Add LangGraph agents capable of:
+
+* rewriting failed queries
+* performing conversion calculations (e.g., Nm → ft-lb)
+* comparing specifications across trims
+* multi-hop retrieval
+
+**Benefit**
+Greatly enhances reasoning, autonomy, and robustness.
+
+---
+
+### 5.5 Metadata Indexing
+
+**Improvement**
+Auto-extract metadata such as:
+
+* section titles
+* subsystem tags (`Brakes`, `Suspension`, etc.)
+* unit types
+* page anchors
+
+**Benefit**
+Improves filtering, targeted retrieval, and structured querying.
+
+---
+
+### 5.6 Smarter Chunking Strategies
+
+Although the current configuration (1200 chars + 200 overlap) works well, future improvements include:
+
+* semantic chunking
+* layout-aware chunking (respecting columns, captions, table boundaries)
+* section-level chunking
+
+**Benefit**
+Higher coherence and less noise sent to the LLM.
+
+---
+
+## 🏁 6. Conclusion
+
+This project establishes a strong and scalable RAG system for extracting vehicle specifications from complex automotive service manuals. It uses a hybrid retrieval strategy, structured LLM prompting, and automated evaluation to deliver accurate and explainable outputs.
+
+The enhancement roadmap—including OCR, reranking, table parsing, and agentic workflows—opens the door for a production-grade automotive knowledge engine capable of operating across manufacturers, vehicle models, and documentation formats.
+
+---
+
+## 📎 Appendix
+
+### Example JSON schema (recommended)
+
+```json
+{
+  "component": "string",
+  "value": "string | number",
+  "unit": "string",
+  "source_page": "integer",
+  "confidence": "float (optional)",
+  "source_text": "string (optional)"
+}
+```
+
+
